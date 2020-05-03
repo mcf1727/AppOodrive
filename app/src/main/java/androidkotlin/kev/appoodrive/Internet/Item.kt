@@ -1,4 +1,4 @@
-package androidkotlin.kev.appoodrive
+package androidkotlin.kev.appoodrive.Internet
 
 import android.os.Parcel
 import android.os.Parcelable

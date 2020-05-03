@@ -1,4 +1,4 @@
-package androidkotlin.kev.appoodrive
+package androidkotlin.kev.appoodrive.Internet
 
 import okhttp3.Credentials
 import okhttp3.Interceptor

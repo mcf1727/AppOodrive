@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ItemListActivity">
+    tools:context=".detailDetailFolder.DetailDetailFolderFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/items_recycler_view"
+        android:id="@+id/detail_detail_folder_fragment_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item" />
