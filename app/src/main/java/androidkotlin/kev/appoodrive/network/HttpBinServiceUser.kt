@@ -1,4 +1,4 @@
-package androidkotlin.kev.appoodrive.detailFolder
+package androidkotlin.kev.appoodrive.network
 
 import androidkotlin.kev.appoodrive.network.GetDataItems
 import androidkotlin.kev.appoodrive.network.GetUser

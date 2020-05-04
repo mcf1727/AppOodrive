@@ -1,4 +1,4 @@
-package androidkotlin.kev.appoodrive.detailFolder
+package androidkotlin.kev.appoodrive.network
 
 import androidkotlin.kev.appoodrive.network.GetDataItems
 import retrofit2.Call
@@ -11,7 +11,7 @@ import retrofit2.http.Path
 //    fun getFolderContent() : Call<List<GetDataItems>>
 //}
 
-interface HttpBinServiceJson {
+interface HttpBinServiceFolder {
     @GET("/items/{id}")
     //@GET("me")
     fun getFolderContent(@Path("id") idFolder: String) : Call<List<GetDataItems>>

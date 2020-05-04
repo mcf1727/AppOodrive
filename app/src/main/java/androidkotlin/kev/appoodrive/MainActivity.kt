@@ -3,10 +3,10 @@ package androidkotlin.kev.appoodrive
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidkotlin.kev.appoodrive.detailDetailFolder.DetailDetailFolderFragment
-import androidkotlin.kev.appoodrive.detailDetailFolder.DetailDetailFolderModel
 import androidkotlin.kev.appoodrive.detailFolder.DetailFolderFragment
-import androidkotlin.kev.appoodrive.detailFolder.DetailFolderModel
+import androidkotlin.kev.appoodrive.network.RequestServerModel
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var adapter: ItemAdapter
     private lateinit var detailFolderFragment: DetailFolderFragment
     private lateinit var detailDetailFolderFragment: DetailDetailFolderFragment
-    private val detailFolderModel = DetailFolderModel(this)
-    private val detailDetailFolderModel = DetailDetailFolderModel(this)   // need to remove
+    private val requestServerModel = RequestServerModel(this)
+    lateinit var idsInFolder: List<String>
 
     companion object{
         const val TAG = "MainActivity"
@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         const val API_URL = "http://192.168.1.77:8080"
         const val USER = "noel"
         const val PASSWORD = "foobar"
-        //TODO: idFolder(id of the folder that's clicked on) is hard code here but needs to be deduced from the view that's clicked on
-        const val idFolder = "4049f4613c8060370aebf6e4df244aa105a0132b"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,14 +44,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
          * start getting data
          */
         //use HTTP Basic Authentication before all API request
-        val okHttpClient = detailFolderModel.authentication(USER, PASSWORD)
+        val okHttpClient = requestServerModel.authentication(USER, PASSWORD)
         // GET request to server
-        detailFolderModel.requestUser(API_URL, okHttpClient, R.id.detail_folder_fragment_recycler_view)
+        requestServerModel.requestUser(API_URL, okHttpClient, R.id.detail_folder_fragment_recycler_view)
     }
 
     override fun onClick(view: View) {
         if (view.tag != null) {
-            Log.i(TAG, "Click sur un item de la liste: ${view.tag}")    //to remove later
+            Log.i(TAG, "Click sur un item de la liste: ${view.tag}")                                  //to remove later
 
             /**
              * start charging detailDetailFolderFragment (content of a folder in the detailFolder)
@@ -70,9 +68,50 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
              * start getting data
              */
             //use HTTP Basic Authentication before all API request
-            val okHttpClient = detailFolderModel.authentication(USER, PASSWORD)
+            val okHttpClient = requestServerModel.authentication(USER, PASSWORD)
             // GET request to server
-            detailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idFolder)
+            println("MainActivity idWanted in onClick : ${idsInFolder}")                                    // need to remove
+            println("MainActivity idWanted${view.tag as Int} : ${idsInFolder[view.tag as Int]}")            //need to remove
+            requestServerModel.requestFolder(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idsInFolder[view.tag as Int])
+
+
+//        if (view.tag != null) {
+//            Log.i(TAG, "Click sur un item de la liste: ${view.tag}")    //to remove later
+//
+//            /**
+//             * start charging detailDetailFolderFragment (content of a folder in the detailFolder)
+//             */
+//            //detailDetailFolderFragment = DetailDetailFolderFragment()         //*
+//            listFragment.add(DetailDetailFolderFragment())
+//            println("MainActivity   size ${listFragment.size}")
+//            supportFragmentManager.beginTransaction()
+//                //.hide(detailFolderFragment)
+//                .hide(if (listFragment.size == 1) detailFolderFragment else listFragment[listFragment.size - 2])
+//                //.add(R.id.container, detailDetailFolderFragment)                   //*
+//                .add(R.id.container, listFragment.last())
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                .addToBackStack(null)
+//                .commit()
+//
+//            /**
+//             * start getting data
+//             */
+//            //use HTTP Basic Authentication before all API request
+//            val okHttpClient = detailFolderModel.authentication(USER, PASSWORD)
+//            // GET request to server
+//            println("MainActivity idWanted in onClick : ${idWanted}")              //*
+//            println("MainActivity idWanted${view.tag as Int} : ${idWanted[view.tag as Int]}")              //*
+//            //detailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idFolder)
+//            detailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idWanted[view.tag as Int])
+
+//            var newFragment: DetailFolderFragment = DetailFolderFragment()
+//            supportFragmentManager.beginTransaction()
+//                .hide(oldFragment)
+//                .add(R.id.container, newFragment)
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                .addToBackStack(null)
+//                .commit()
+//            oldFragment = newFragment
 
 // to move: because "DetailDetailFolderModel" and "HttpBinServiceJsonDetailDetail" isn't used
 //            //use HTTP Basic Authentication before all API request
@@ -85,19 +124,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * action for when request is successful from the server
      */
-    fun onSuccessfulDataHandled(items: List<Item>, viewId: Int) {
+    fun onSuccessfulDataHandled(items: List<Item>, viewId: Int, idFolders: List<String>) {
         adapter = ItemAdapter(items, this@MainActivity)
         val mRecyclerView =findViewById<RecyclerView>(viewId)
         mRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         mRecyclerView.adapter = adapter
 
-        Log.i(TAG, "(succeed) nb of items : ${items.size}")
+        idsInFolder = idFolders
+        println("MainActivity idWanted in onSuccessfulDataHandled : ${idsInFolder}")            //need to remove
     }
 
     /**
      * action for when request is failed from the server
      */
     fun onFailedDataHandled(throwable: Throwable){
+        Toast.makeText(this, "t${throwable.message}", Toast.LENGTH_SHORT).show()
+
         Log.i(TAG, "(failed reason) : ${throwable.message}")
     }
 
