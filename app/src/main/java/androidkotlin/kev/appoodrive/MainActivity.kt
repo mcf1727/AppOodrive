@@ -3,7 +3,6 @@ package androidkotlin.kev.appoodrive
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidkotlin.kev.appoodrive.Internet.Item
 import androidkotlin.kev.appoodrive.detailDetailFolder.DetailDetailFolderFragment
 import androidkotlin.kev.appoodrive.detailDetailFolder.DetailDetailFolderModel
 import androidkotlin.kev.appoodrive.detailFolder.DetailFolderFragment
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -20,13 +18,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var detailFolderFragment: DetailFolderFragment
     private lateinit var detailDetailFolderFragment: DetailDetailFolderFragment
     private val detailFolderModel = DetailFolderModel(this)
-    private val detailDetailFolderModel = DetailDetailFolderModel(this)
+    private val detailDetailFolderModel = DetailDetailFolderModel(this)   // need to remove
 
     companion object{
         const val TAG = "MainActivity"
-        const val API_URL = "http://192.168.1.77:8080"   //val API_URL = "http://localhost:8080", here localhost is my PC IP = 192.168.1.77
+        //TODO: API_URL = "http://localhost:8080", here localhost is the IP of my PC=192.168.1.77
+        const val API_URL = "http://192.168.1.77:8080"
         const val USER = "noel"
         const val PASSWORD = "foobar"
+        //TODO: idFolder(id of the folder that's clicked on) is hard code here but needs to be deduced from the view that's clicked on
+        const val idFolder = "4049f4613c8060370aebf6e4df244aa105a0132b"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         /**
-         * start charging detailFolderFragment
+         * start charging detailFolderFragment = root folder
          */
         detailFolderFragment = DetailFolderFragment()
         supportFragmentManager.beginTransaction()
@@ -47,22 +48,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //use HTTP Basic Authentication before all API request
         val okHttpClient = detailFolderModel.authentication(USER, PASSWORD)
         // GET request to server
-        detailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_folder_fragment_recycler_view)
+        detailFolderModel.requestUser(API_URL, okHttpClient, R.id.detail_folder_fragment_recycler_view)
     }
 
     override fun onClick(view: View) {
         if (view.tag != null) {
-            Log.i(TAG, "Click sur un item de la liste")    //to remove later
+            Log.i(TAG, "Click sur un item de la liste: ${view.tag}")    //to remove later
 
             /**
              * start charging detailDetailFolderFragment (content of a folder in the detailFolder)
              */
             detailDetailFolderFragment = DetailDetailFolderFragment()
             supportFragmentManager.beginTransaction()
-                //.replace(R.id.container, detailDetailFolderFragment)
                 .hide(detailFolderFragment)
                 .add(R.id.container, detailDetailFolderFragment)
-                //.show(detailDetailFolderFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit()
@@ -71,9 +70,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
              * start getting data
              */
             //use HTTP Basic Authentication before all API request
-            val okHttpClient = detailDetailFolderModel.authentication(USER, PASSWORD)
+            val okHttpClient = detailFolderModel.authentication(USER, PASSWORD)
             // GET request to server
-            detailDetailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view)
+            detailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idFolder)
+
+// to move: because "DetailDetailFolderModel" and "HttpBinServiceJsonDetailDetail" isn't used
+//            //use HTTP Basic Authentication before all API request
+//            val okHttpClient = detailDetailFolderModel.authentication(USER, PASSWORD)
+//            // GET request to server
+//            detailDetailFolderModel.requestServer(API_URL, okHttpClient, R.id.detail_detail_folder_fragment_recycler_view, idFolder)
         }
     }
 

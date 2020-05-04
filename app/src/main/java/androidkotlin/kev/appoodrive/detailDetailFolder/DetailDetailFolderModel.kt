@@ -1,8 +1,8 @@
 package androidkotlin.kev.appoodrive.detailDetailFolder
 
-import androidkotlin.kev.appoodrive.Internet.AuthenticationInterceptor
-import androidkotlin.kev.appoodrive.Internet.GetDataItems
-import androidkotlin.kev.appoodrive.Internet.Item
+import androidkotlin.kev.appoodrive.network.AuthenticationInterceptor
+import androidkotlin.kev.appoodrive.network.GetDataItems
+import androidkotlin.kev.appoodrive.Item
 import androidkotlin.kev.appoodrive.MainActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -28,7 +28,7 @@ class DetailDetailFolderModel(val view: MainActivity) {
     /**
      * GET request to server
      */
-    fun requestServer(url: String, okHttpClient: OkHttpClient, viewId: Int) {
+    fun requestServer(url: String, okHttpClient: OkHttpClient, viewId: Int, idFolder: String) {
         val retrofitJson = Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(url)
@@ -36,7 +36,7 @@ class DetailDetailFolderModel(val view: MainActivity) {
             .build()
         //val serviceJson: HttpBinServiceJson =retrofitJson.create(HttpBinServiceJson::class.java)
         val serviceJson: HttpBinServiceJsonDetailDetail =retrofitJson.create(HttpBinServiceJsonDetailDetail::class.java)
-        val callJson = serviceJson.getFolderContent()
+        val callJson = serviceJson.getFolderContent(idFolder)
 
         callJson.enqueue(object: Callback<List<GetDataItems>> {
             override fun onResponse(call: Call<List<GetDataItems>>?, response: Response<List<GetDataItems>>) {

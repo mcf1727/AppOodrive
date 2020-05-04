@@ -3,7 +3,6 @@ package androidkotlin.kev.appoodrive
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidkotlin.kev.appoodrive.Internet.Item
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item.view.*
 

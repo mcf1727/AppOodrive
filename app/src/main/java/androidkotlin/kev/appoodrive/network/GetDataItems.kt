@@ -1,4 +1,4 @@
-package androidkotlin.kev.appoodrive.Internet
+package androidkotlin.kev.appoodrive.network
 
 class GetDataItems (
     val name: String,
