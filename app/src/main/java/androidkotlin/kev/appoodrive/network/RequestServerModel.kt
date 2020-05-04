@@ -43,12 +43,11 @@ class RequestServerModel(val view: MainActivity) {
                 val idFolders = mutableListOf<String>()
                 for (i in 0 until getDataItems?.size!!) {
                     items.add(Item(getDataItems[i].name))
-                    idFolders.add(getDataItems[i].id)    //*
+                    idFolders.add(getDataItems[i].id)
                 }
-                println("MainActivity idFolders in onResponse $idFolders")          //need to remove
-
                 view.onSuccessfulDataHandled(items, viewId, idFolders)
             }
+
             override fun onFailure(call: Call<List<GetDataItems>>, throwable: Throwable) {
                 view.onFailedDataHandled(throwable)
             }
@@ -75,6 +74,7 @@ class RequestServerModel(val view: MainActivity) {
                 // request the content in the root folder
                 requestFolder(url, okHttpClient, viewId, getUser!!.rootItem.id)
             }
+
             override fun onFailure(call: Call<GetUser>, throwable: Throwable) {
                 view.onFailedDataHandled(throwable)
             }
