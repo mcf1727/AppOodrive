@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var idsInFolder: List<String>
 
     companion object{
-        //TODO: API_URL = "http://localhost:8080", here localhost is the IP of my PC=192.168.1.77
-        const val API_URL = "http://192.168.1.77:8080"
+        //TODO:  replace "localhost" in val API_URL = "http://localhost:8080" by the IP address of your established server
+        const val API_URL = "http://localhost:8080"
         const val USER = "noel"
         const val PASSWORD = "foobar"
         const val TAG = "MainActivity"
@@ -87,6 +87,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      * action for when request is failed from the server
      */
     fun onFailedDataHandled(throwable: Throwable){
-        Toast.makeText(this, "t${throwable.message}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${throwable.message}", Toast.LENGTH_LONG).show()
     }
 }
