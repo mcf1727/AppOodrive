@@ -1,9 +1,9 @@
 package androidkotlin.kev.appoodrive.network
 
-class GetUser (
+class User (
     val firstName: String,
     val lastName: String,
-    val rootItem: GetDataItems
+    val rootItem: Item
 ){
 
 }

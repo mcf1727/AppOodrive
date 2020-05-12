@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Item(var itemName: String? = "") : Parcelable{
+
     constructor(parcel: Parcel) : this(parcel.readString()) {
     }
 

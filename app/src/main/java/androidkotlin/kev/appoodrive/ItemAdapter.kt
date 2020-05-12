@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item.view.*
 
-class ItemAdapter(val items: List<Item>, val itemClickListener: View.OnClickListener) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private val items: List<Item>, private val itemClickListener: View.OnClickListener) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

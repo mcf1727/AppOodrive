@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface HttpBinServiceUser {
     @GET("me")
-    fun getFolderContent(): Call<GetUser>
+    fun getCurrentUser(): Call<User>
 }

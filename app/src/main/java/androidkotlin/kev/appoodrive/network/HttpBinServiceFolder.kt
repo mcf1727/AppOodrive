@@ -7,5 +7,5 @@ import retrofit2.http.Path
 interface HttpBinServiceFolder {
     @GET("/items/{id}")
     //@GET("me")
-    fun getFolderContent(@Path("id") idFolder: String) : Call<List<GetDataItems>>
+    fun getFolderContent(@Path("id") idFolder: String) : Call<List<Item>>
 }

@@ -1,6 +1,6 @@
 package androidkotlin.kev.appoodrive.network
 
-class GetDataItems (
+class Item (
     val name: String,
     val id: String,
     val parentId: String,
