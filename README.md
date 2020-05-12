@@ -25,6 +25,6 @@ Drive APP: Listing of files and folders / Navigate back and forth within folders
    retrofit: to do Http request
    
 
-- Any particular remarks you may have to express.
+- Any particular remarks you may have to express?
 
   TODO: adapt to screen rotation 
